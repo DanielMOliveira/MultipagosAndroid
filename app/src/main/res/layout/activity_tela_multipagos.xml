@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="net.danielmoliveira.teste1.TelaMultipagos"
+>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:stretchColumns="1" >
+        <TableRow
+            android:layout_height="fill_parent">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#372c24"
+            android:text="CONTA SEM FATURA"
+            android:gravity="center" />
+
+            <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btnContaSemFatura"
+            android:id="@+id/btnContaSemFatura"
+            android:layout_column="1"
+                android:onClick="onClickContaSemFatura" />
+
+        </TableRow>
+        <!-- Linha de separação -->
+        <TableRow android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/background_material_dark">
+        <View android:layout_width="match_parent" android:layout_height="5dp" />
+        </TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center|center_vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pagamento"
+                android:id="@+id/textView2"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btnPagamentoBoleto"
+                android:id="@+id/btnPagamentoBoleto"
+                android:layout_column="1"
+                android:onClick="onClickArrecadacao" />
+        </TableRow>
+
+
+    </TableLayout>
+
+</LinearLayout>
