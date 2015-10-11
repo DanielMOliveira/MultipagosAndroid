@@ -28,12 +28,10 @@ public class ListarContasEmAberto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_contas_em_aberto);
 
-        String codigo = getIntent().getStringExtra("codigo");
-
         //TextView textView = (TextView)findViewById(R.id.txtTituloContasEmAberto);
         //
         // textView.append(codigo);
-        getCel = codigo;
+        getCel = getIntent().getStringExtra("codigo");
         AsyncCallWS task = new AsyncCallWS();
         task.execute();
     }
@@ -116,6 +114,11 @@ public class ListarContasEmAberto extends AppCompatActivity {
     public void btnPagar_Click(View v)
     {
         Intent i = new Intent(this,DadosBoleto.class);
+        i.putExtra("codBarras","");
+        i.putExtra("dataVencimento","");
+        i.putExtra("valor","");
+
+
         startActivity(i);
     }
 

@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+
 public class CodigodaInstalacao extends AppCompatActivity {
 
     @Override
@@ -20,7 +24,7 @@ public class CodigodaInstalacao extends AppCompatActivity {
 
         if (v.getId() == R.id.btConsultarSemFatura)
         {
-            EditText txtCodigoInstalacao = (EditText)findViewById(R.id.txtCodigoInstalacao);
+            BootstrapEditText txtCodigoInstalacao = (BootstrapEditText)findViewById(R.id.txtCodigoInstalacao);
             String codigoInstalacao = txtCodigoInstalacao.getText().toString();
             if (!codigoInstalacao.isEmpty()){
                 Toast.makeText(getApplicationContext(), "Consultando webservice...", Toast.LENGTH_SHORT).show();
@@ -32,7 +36,7 @@ public class CodigodaInstalacao extends AppCompatActivity {
             {
                 Toast.makeText(getApplicationContext(),"Digite um valor valido",Toast.LENGTH_LONG).show();
                 txtCodigoInstalacao.setVisibility(View.VISIBLE);
-                txtCodigoInstalacao.setBackgroundColor(Color.RED);
+                txtCodigoInstalacao.setBootstrapBrand(DefaultBootstrapBrand.DANGER);
 
             }
 

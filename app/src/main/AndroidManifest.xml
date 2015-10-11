@@ -40,6 +40,7 @@
         <activity android:name=".IniciarProcessoTEF" >
         </activity>
         <activity android:name=".InformarBoleto" >
+
         </activity>
     </application>
 
