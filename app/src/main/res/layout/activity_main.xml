@@ -1,71 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
     <!--  Header Starts-->
-    <LinearLayout android:id="@+id/header"
+    <LinearLayout
+        android:id="@+id/header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dip"
-        android:paddingBottom="5dip">
+        android:paddingBottom="5dip"
+        android:paddingTop="5dip">
         <!-- Logo Start-->
-        <ImageView android:src="@drawable/logo"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"/>
+            android:layout_marginLeft="10dip"
+            android:src="@drawable/logo" />
         <!-- Logo Ends -->
     </LinearLayout>
     <!--  Header Ends -->
     <!-- Footer Start -->
-    <LinearLayout android:id="@+id/footer"
+    <LinearLayout
+        android:id="@+id/footer"
         android:layout_width="fill_parent"
         android:layout_height="90dip"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
+        android:orientation="vertical"
         android:textAlignment="viewEnd">
 
     </LinearLayout>
     <!-- Footer Ends -->
 
     <!-- Login Form -->
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dip"
         android:layout_below="@id/header"
-        android:id="@+id/linearLayout">
-    <!--  Email Label -->
+        android:orientation="vertical"
+        android:padding="10dip">
+        <!--  Email Label -->
 
         <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#372c24"
-        android:text="UserID"
-        android:id="@+id/lblUserID"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+            android:id="@+id/lblUserID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="UserID"
+            android:textColor="#372c24" />
 
-    <!--<EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtUserID"
-        android:layout_below="@+id/lblUserID"
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="20dip"
-        android:singleLine="true"
-        android:hint="Codigo do PDV"/>
-        -->
-        <com.beardedhen.androidbootstrap.BootstrapEditText
+        <!--<EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txtUserID"
@@ -73,44 +65,52 @@ xmlns:tools="http://schemas.android.com/tools"
             android:layout_marginTop="5dip"
             android:layout_marginBottom="20dip"
             android:singleLine="true"
+            android:hint="Codigo do PDV"/>
+            -->
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/txtUserID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblUserID"
+            android:layout_marginBottom="20dip"
+            android:layout_marginTop="5dip"
             android:layout_weight="2"
             android:hint="Codigo do PDV"
+            android:singleLine="true"
             app:bootstrapBrand="success"
-            app:roundedCorners="true"
-            />
+            app:roundedCorners="true" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#372c24"
-        android:text="Digite a senha"
-        android:id="@+id/textView"
-        android:layout_below="@+id/txtUserID"
-        android:layout_alignParentStart="true"
-        />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txtUserID"
+            android:text="Digite a senha"
+            android:textColor="#372c24" />
 
-    <com.beardedhen.androidbootstrap.BootstrapEditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="Digite o passowrd"
-        android:id="@+id/txtPassword"
-        android:layout_marginTop="5dip"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true"
-        app:bootstrapBrand="success"
-        app:roundedCorners="true"/>
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/txtPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="5dip"
+            android:hint="Digite o passowrd"
+            android:inputType="textPassword"
+            app:bootstrapBrand="success"
+            app:roundedCorners="true" />
 
     </LinearLayout>
 
     <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/btnLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/btnLogin"
-        android:onClick="OnButtonClick"
-        android:layout_below="@+id/linearLayout"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout"
+        android:onClick="OnButtonClick"
+        android:text="Login"
         app:bootstrapBrand="primary"
         app:roundedCorners="true"
 
