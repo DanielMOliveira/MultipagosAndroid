@@ -21,4 +21,7 @@
     <string name="btnPagamentoBoleto">Pagar Arrecadação</string>
     <string name="txtCodigoInstalacao">Digite o Codigo do Cliente</string>
     <string name="btnRealizarPagamento">Realizar Pagamento</string>
+    <string name="create_bluetooth_connection">Criar conexão bluetooth</string>
+    <string name="title_activity_bluetooth">Dispositivos bluetooth</string>
+    <string name="show_transactions">Exibir transações</string>
 </resources>

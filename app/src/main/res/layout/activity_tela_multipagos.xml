@@ -1,42 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="net.danielmoliveira.teste1.TelaMultipagos"
-    android:orientation="horizontal">
+    tools:context="net.danielmoliveira.teste1.TelaMultipagos">
 
 
     <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/btnPagamentoBoleto"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btnPagamentoBoleto"
-        android:id="@+id/btnPagamentoBoleto"
-
+        android:layout_above="@+id/btnContaSemFatura"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="40dp"
         android:onClick="onClickArrecadacao"
+        android:text="@string/btnPagamentoBoleto"
         app:bootstrapBrand="primary"
-        app:roundedCorners="true"
         app:bootstrapSize="xl"
-        android:layout_marginTop="133dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        app:roundedCorners="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/btnContaSemFatura"
-                android:id="@+id/btnContaSemFatura"
-
-                android:onClick="onClickContaSemFatura"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="xl"
+        android:id="@+id/btnContaSemFatura"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:onClick="onClickContaSemFatura"
+        android:text="@string/btnContaSemFatura"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="xl"
+        app:roundedCorners="true" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/showPinpadsButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btnContaSemFatura"
+        android:layout_marginTop="40dp"
+        android:text="@string/create_bluetooth_connection"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="xl"
+        app:roundedCorners="true" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/showTransactionsButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/showPinpadsButton"
+        android:layout_marginTop="40dp"
+        android:text="@string/show_transactions"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="xl"
+        app:roundedCorners="true" />
 
 
 </RelativeLayout>
