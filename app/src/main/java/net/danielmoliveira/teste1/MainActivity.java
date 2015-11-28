@@ -28,7 +28,9 @@ import java.util.List;
 import stone.application.StoneStart;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.ActiveApplicationProvider;
+import stone.user.Partner;
 import stone.user.UserModel;
+import stone.utils.GlobalInformations;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -58,12 +60,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         String userName = txtUserName.getText().toString();
+        Toast.makeText(getApplicationContext(),"Efetuando login...",Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(MainActivity.this,TelaMultipagos.class);
+        i.putExtra("username",userName);
+        startActivity(i);
+
+        finish(); // kill this Activity
+
         if (userName.equals("101")){
 
             Toast.makeText(getApplicationContext(),"Efetuando login...",Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(MainActivity.this,TelaMultipagos.class);
-            i.putExtra("username",userName);
-            startActivity(i);
+            Intent a = new Intent(MainActivity.this,TelaMultipagos.class);
+            a.putExtra("username",userName);
+            startActivity(a);
 
             finish(); // kill this Activity
         } else {
@@ -78,42 +87,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
-        // The SDK need start, call this to initialize a session
-        // the method 'init' will return a List of UserModel.
-        // UserModel represent all user in cache, get it just to check if is != null
-        List<UserModel> userModels = StoneStart.init(this);
 
-        // if userModels == null, your SDK has not been activated, yet.
-        // if userModels != null, you don't need do nothing.
-        if (userModels == null) {
-
-            // the SDK can active multi merchants.
-            // But in this case, we'll use only one Stone code
-            List<String> stoneCodeList = new ArrayList<>();
-            stoneCodeList.add(STONE_CODE);
-
-            final ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
-            // by default, all 'providers' work in background
-            // but if you want give to your user a feedback, pass false in this method
-            activeApplicationProvider.setWorkInBackground(false);
-            activeApplicationProvider.setDialogTitle("Ativando");
-            activeApplicationProvider.setDialogMessage("Ativando Stone SDK, por favor, aguarde..");
-            activeApplicationProvider.setConnectionCallback(new StoneCallbackInterface() {
-
-                public void onSuccess() {
-                    // your SDK now has a key to pass transactions and your
-                    Toast.makeText(getApplicationContext(),"SDK ativado com sucesso",Toast.LENGTH_LONG).show();
-                }
-
-                public void onError() {
-                    // occurred a error, check the logcat
-                    Toast.makeText(getApplicationContext(),"Erro na ativação, derifique o erro na documentação: " + activeApplicationProvider.getListOfErrors(),Toast.LENGTH_LONG).show();
-                }
-            });
-            activeApplicationProvider.execute(); // call this method to run the provider
-        }
     }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+
+    }
     //    public void OnButtonClick(View v) {
 //
 //        BootstrapEditText bootstrapEditText = (BootstrapEditText)findViewById(R.id.txtUserID);

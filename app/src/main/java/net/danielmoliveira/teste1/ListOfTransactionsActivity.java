@@ -8,16 +8,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import stone.application.enums.TransactionStatusEnum;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.database.transaction.TransactionDAO;
 import stone.database.transaction.TransactionObject;
 import stone.providers.CancellationProvider;
+import stone.providers.PrintProvider;
 import stone.providers.PrintReceiptProvider;
+import stone.user.UserModel;
 import stone.utils.GlobalInformations;
+import stone.utils.PrintObject;
 
 /**
  * Created by JGabrielFreitas on 30/10/15.
@@ -53,8 +58,15 @@ public class ListOfTransactionsActivity extends AppCompatActivity implements Ada
 
         List<String> transactionsToShow = new ArrayList<>();
 
-        for (TransactionObject currentTransaction : allTransactions)
-            transactionsToShow.add(String.format("%s\n%s", currentTransaction.getAmount(), currentTransaction.getTransactionStatus()));
+        for (TransactionObject currentTransaction : allTransactions) {
+            String status = "";
+            if ( currentTransaction.getTransactionStatus() == TransactionStatusEnum.APPROVED)
+                status = "Aprovada";
+            else
+                status = "Cancelada";
+
+            transactionsToShow.add(String.format("%s\n%s", currentTransaction.getAmount(), status));
+        }
 
         listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, transactionsToShow));
         listView.setOnItemClickListener(this);
@@ -62,9 +74,98 @@ public class ListOfTransactionsActivity extends AppCompatActivity implements Ada
 
     }
 
-    // to cancel transaction
+
+
+    // to print (if pinpad is print support)
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        if (GlobalInformations.getPinpadListSize() == 0) {
+
+            Toast.makeText(this,"Nenhum pinpad conectado.",Toast.LENGTH_SHORT);
+            return;
+        }
+        // capture the selected tranaction
+        TransactionObject transactionObject = allTransactions.get(position);
+
+        if (transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
+            UserModel userModel = GlobalInformations.getUserModel(0);
+
+            //TESTE DE IMPRESSAO
+            List<PrintObject> listToPrint = new ArrayList<PrintObject>();
+
+            String[] date = transactionObject.getDate().split("-");
+            String[] hour = transactionObject.getTime().split(":");
+            String dateHour = String.format("%s/%s/%s %s:%s", new Object[]{date[2], date[1], date[0], hour[0], hour[1]});
+            String dividerLine = "________________________";
+            Double amountAsDouble = Double.valueOf(Double.parseDouble(transactionObject.getAmount()) / 100.0D);
+            DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+            listToPrint.add(new PrintObject("Credenciadora Banco PAN", PrintObject.SMALL, PrintObject.CENTER));
+            listToPrint.add(new PrintObject("MULTIPAGOS ARRECADAÇÃO DIGITAL", PrintObject.BIG, PrintObject.CENTER));
+            listToPrint.add(new PrintObject("Multilink Tecnologia", PrintObject.BIG, PrintObject.CENTER));
+            listToPrint.add(new PrintObject("01.104.875/0001-04", PrintObject.BIG, PrintObject.CENTER));
+            listToPrint.add(new PrintObject(dividerLine, PrintObject.BIG, PrintObject.CENTER));
+
+            listToPrint.add(new PrintObject("V1.3.11.0 TERM: 101", PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject(dividerLine, PrintObject.BIG, PrintObject.CENTER));
+            listToPrint.add(new PrintObject(" ", PrintObject.BIG, PrintObject.CENTER));
+
+            listToPrint.add(new PrintObject("ELEKTRO", PrintObject.BIG, PrintObject.LEFT));
+            listToPrint.add(new PrintObject(" ", PrintObject.BIG, PrintObject.CENTER));
+            listToPrint.add(new PrintObject("Codigo de Barras:", PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("86680000002-2 54091557856-6", PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("90057519408-0 10061000000-0", PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject(" ", PrintObject.MEDIUM, PrintObject.CENTER));
+            if(decimalFormat.format(amountAsDouble).length() == 3) {
+                listToPrint.add(new PrintObject("Valor Pago: R$ 0" + decimalFormat.format(amountAsDouble), PrintObject.MEDIUM, PrintObject.LEFT));
+            } else {
+                listToPrint.add(new PrintObject("Valor Pago: R$ " + decimalFormat.format(amountAsDouble), PrintObject.MEDIUM, PrintObject.LEFT));
+            }
+            listToPrint.add(new PrintObject("Pagamento  :" + transactionObject.getDate().toString(), PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("Autorização:"+transactionObject.getAid(), PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("NSU        :"+transactionObject.getRecipientTransactionIdentification(), PrintObject.MEDIUM, PrintObject.LEFT));
+
+            listToPrint.add(new PrintObject(dividerLine, PrintObject.BIG, PrintObject.CENTER));
+            listToPrint.add(new PrintObject("** VIA CLIENTE **", PrintObject.SMALL, PrintObject.CENTER));
+            listToPrint.add(new PrintObject("STONE - VIA CLIENTE", PrintObject.SMALL, PrintObject.CENTER));
+            listToPrint.add(new PrintObject(String.format("%s - %s", new Object[]{transactionObject.getCardBrand(), "DEBITO A VISTA"}), PrintObject.MEDIUM, PrintObject.CENTER));
+            listToPrint.add(new PrintObject(String.format("%s %s ",new Object[]{transactionObject.getCardHolderNumber(),dateHour}), PrintObject.SMALL, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("AID: " + transactionObject.getAid(), PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("ARCQ: " + transactionObject.getArcq(), PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("Serial: " + transactionObject.getPinpadUsed(), PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("STONE ID: " + transactionObject.getRecipientTransactionIdentification(), PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject(dividerLine, PrintObject.BIG, PrintObject.CENTER));
+
+            listToPrint.add(new PrintObject(" ", PrintObject.MEDIUM, PrintObject.CENTER));
+            listToPrint.add(new PrintObject(" ", PrintObject.MEDIUM, PrintObject.CENTER));
+
+            final PrintProvider printProvider = new PrintProvider(this,listToPrint,GlobalInformations.getPinpadFromListAt(0));
+            printProvider.setWorkInBackground(false);
+            printProvider.setDialogMessage("Aguarde...");
+            printProvider.setDialogTitle("Imprimindo Comprovante");
+            printProvider.setConnectionCallback(new StoneCallbackInterface() {
+                @Override
+                public void onSuccess() {
+                    //TODO redirect
+                }
+
+                @Override
+                public void onError() {
+                    Toast.makeText(getApplicationContext(), "Ocorreu um erro durante a impressão: " + printProvider.getListOfErrors(), Toast.LENGTH_LONG).show();
+                }
+            });
+            printProvider.execute();
+
+        }
+        else
+            Toast.makeText(getApplicationContext(), "Transaçao não finalizada com sucesso. Não é possivel imprimir", Toast.LENGTH_LONG).show();
+
+
+    }
+
+    // to cancel transaction
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         // capture the selected tranaction
         TransactionObject transactionObject = allTransactions.get(position);
 
@@ -93,27 +194,6 @@ public class ListOfTransactionsActivity extends AppCompatActivity implements Ada
             }
         });
         cancellationProvider.execute();
-    }
-
-    // to print (if pinpad is print support)
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-        // capture the selected tranaction
-        TransactionObject transactionObject = allTransactions.get(position);
-
-        final PrintReceiptProvider printReceiptProvider = new PrintReceiptProvider(this, GlobalInformations.getPinpadFromListAt(0), transactionObject.getIdFromBase(), GlobalInformations.getUserModel(0));
-        printReceiptProvider.setDialogMessage("Imprimindo..");
-        printReceiptProvider.setWorkInBackground(false);
-        printReceiptProvider.setConnectionCallback(new StoneCallbackInterface() {
-
-            public void onSuccess() {}
-
-            public void onError() {
-                Toast.makeText(getApplicationContext(), "Ocorreu um erro durante a impressão: " + printReceiptProvider.getListOfErrors(), Toast.LENGTH_LONG).show();
-            }
-        });
-        printReceiptProvider.execute();
-
         return false;
     }
 }

@@ -12,6 +12,7 @@ import stone.application.enums.TransactionStatusEnum;
 import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.providers.TransactionProvider;
+import stone.utils.EmailClient;
 import stone.utils.GlobalInformations;
 import stone.utils.StoneTransaction;
 
@@ -40,10 +41,11 @@ public class DadosBoleto extends AppCompatActivity {
         // check is there's a pinpad connected
         if (Utils.isConnectedWithPinpad() == true) {
 
-            StoneTransaction stoneTransaction = new StoneTransaction(GlobalInformations.getPinpadFromListAt(0));
+            final StoneTransaction stoneTransaction = new StoneTransaction(GlobalInformations.getPinpadFromListAt(0));
             stoneTransaction.setAmount("50"); // R$ 0,50
             stoneTransaction.setRequestId("123465789"); // ID in portal
             stoneTransaction.setShortName("MULTIPAGOS"); // name that will appears in stratum client
+            stoneTransaction.setEmailClient(new EmailClient("smtp.gmail.com", "danielmoliveira@gmail.com", "!y0x#LMDG2015!@%", "daniel@danielmoliveira.net", "Comprovante"));
             stoneTransaction.setInstalmentTransactionEnum(InstalmentTransactionEnum.ONE_INSTALMENT); // transaction "a vista"
             stoneTransaction.setTypeOfTransaction(TypeOfTransactionEnum.DEBIT);
             stoneTransaction.setUserModel(GlobalInformations.getUserModel(0));
@@ -56,9 +58,12 @@ public class DadosBoleto extends AppCompatActivity {
                 public void onSuccess() {
                     if (transactionProvider.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
                         Toast.makeText(getApplicationContext(), "Sua transação foi efetuada com sucesso", Toast.LENGTH_LONG).show();
+
                         finish();
-                    } else if (transactionProvider.getTransactionStatus() == TransactionStatusEnum.REJECTED)
+                    } else if (transactionProvider.getTransactionStatus() == TransactionStatusEnum.REJECTED) {
                         Toast.makeText(getApplicationContext(), "Sua transação foi rejeitada pelo autorizador", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), transactionProvider.getMessageFromAuthorize().toString(), Toast.LENGTH_SHORT).show();
+                    }
                     else if (transactionProvider.getTransactionStatus() == TransactionStatusEnum.TECHNICAL_ERROR)
                         Toast.makeText(getApplicationContext(), "Houve um erro técnico durante o processamento da transação, tente novamente", Toast.LENGTH_LONG).show();
                     else // DECLINED
