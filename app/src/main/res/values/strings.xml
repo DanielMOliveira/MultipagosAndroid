@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Multipagos Pagamentos</string>
+    <string name="title_activity_main">Multipagos - ELEKTRO</string>
+    <string name="title_activity_transacao_detalhe">Detalhe da Transacao</string>
+    <string name="title_activity_transacoes_exibir">Exibir Transacoes</string>
+    <string name="show_transactions">Exibir Transações</string>
+    <string name="create_bluetooth_connection">Criar conexão bluetooth</string>
+    <string name="btnContaSemFatura">Conta sem Fatura</string>
+    <string name="btnPagamentoBoleto">Pagar Arrecadação</string>
+    <string name="title_activity_bluetooth">Conexões Bluetooth</string>
+</resources>
