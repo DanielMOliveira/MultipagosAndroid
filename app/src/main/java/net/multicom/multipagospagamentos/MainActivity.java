@@ -11,16 +11,15 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import net.multicom.contasemfatura.ConsultarContaSemFatura;
+import net.multicom.transacao.TransacoesExibir;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,11 +138,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Intent intent1 = new Intent(this, CodigoInstalacao.class);
                 startActivity(intent1);
                 break;
+                 */
             case R.id.btnContaSemFatura:
-                Intent intent2 = new Intent(this, InformarBoleto.class);
+                Intent intent2 = new Intent(this, ConsultarContaSemFatura.class);
                 startActivity(intent2);
                 break;
-                */
+
 
         }
     }
@@ -231,7 +231,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
                 btnTransactionsButton.setEnabled(true);
-                btnPagarArrecadacao.setEnabled(true);
+                //Sem pagamento de arrecadacao neste momento
+                btnPagarArrecadacao.setEnabled(false);
+                btnPagarArrecadacao.setBackgroundColor(Color.GRAY);
+
                 btnContasemFatura.setEnabled(true);
 
                 btnContasemFatura.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -245,11 +248,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 if (!Build.FINGERPRINT.startsWith("generic") ) {
                     btnContasemFatura.setBackgroundColor(Color.GRAY);
                     btnTransactionsButton.setBackgroundColor(Color.GRAY);
+                    btnTransactionsButton.setBackgroundColor(Color.GRAY);
                     btnPagarArrecadacao.setBackgroundColor(Color.GRAY);
 
-                    btnTransactionsButton.setEnabled(false);
+                    //btnTransactionsButton.setEnabled(false);
                     btnPagarArrecadacao.setEnabled(false);
-                    btnContasemFatura.setEnabled(false);
+                    //btnContasemFatura.setEnabled(false);
                 }
 
             }
@@ -257,7 +261,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
-        public void testarPagamento() {
+    public void testarPagamento() {
 //TOOD: Testar timeout de pagamento
             // check is there's a pinpad connected
             if (Utils.isConnectedWithPinpad() == true) {

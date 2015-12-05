@@ -31,15 +31,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".transacao_detalhe"
+            android:name="net.multicom.transacao.transacao_detalhe"
             android:label="@string/title_activity_transacao_detalhe"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="net.multicom.transacao.TransacoesExibir">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.multicom.multipagospagamentos.MainActivity" />
         </activity>
         <activity
-            android:name=".TransacoesExibir"
+            android:name="net.multicom.transacao.TransacoesExibir"
             android:label="@string/title_activity_transacoes_exibir"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -53,6 +53,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.multicom.multipagospagamentos.MainActivity" />
+        </activity>
+        <activity
+            android:name="net.multicom.contasemfatura.ConsultarContaSemFatura"
+            android:label="@string/title_activity_actvity__consultar_conta_sem_fatura"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.multicom.multipagospagamentos.MainActivity" />
+        </activity>
+        <activity
+            android:name="net.multicom.contasemfatura.contasemfaturadetalhe"
+            android:label="@string/title_activity_contasemfaturadetalhe"
+            android:parentActivityName="net.multicom.contasemfatura.ConsultarContaSemFatura">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.multicom.contasemfatura.ConsultarContaSemFatura" />
         </activity>
     </application>
 

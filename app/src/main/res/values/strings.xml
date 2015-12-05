@@ -8,4 +8,6 @@
     <string name="btnContaSemFatura">Conta sem Fatura</string>
     <string name="btnPagamentoBoleto">Pagar Arrecadação</string>
     <string name="title_activity_bluetooth">Conexões Bluetooth</string>
+    <string name="title_activity_actvity__consultar_conta_sem_fatura">Conta Sem Fatura</string>
+    <string name="title_activity_contasemfaturadetalhe">Dados Conta Sem Fatura</string>
 </resources>

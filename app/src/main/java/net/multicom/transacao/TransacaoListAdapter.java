@@ -1,18 +1,16 @@
-package net.multicom.multipagospagamentos;
+package net.multicom.transacao;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-
-import org.w3c.dom.Text;
+import net.multicom.multipagospagamentos.R;
 
 import stone.database.transaction.TransactionDAO;
 
@@ -41,18 +39,36 @@ public class TransacaoListAdapter extends RecyclerView.Adapter<TransacaoListAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         //TODO: Caso esteja zerada como fazer?
-        final Transacao transacao = new TransacaoData().transacaoList(transactionDAO).get(position);
+
+        final Transacao transacao;
+        if (!Build.FINGERPRINT.startsWith("generic") ) {
+
+            transacao = new TransacaoData().transacaoList(transactionDAO).get(position);
+        }
+       else
+            transacao = new TransacaoData().transacaoList().get(position);
 
         holder.Data.setText(transacao.Data);
         holder.Hora.setText(transacao.Hora);
-        holder.Valor.setText(transacao.Valor);
-        holder.Tipo.setText(transacao.Tipo);
+        holder.Valor.setText("R$ " + transacao.Valor);
+        holder.Tipo.setText("Debito a vista");
+        holder.Status.setText(transacao.Status);
 
     }
 
     @Override
-    public int getItemCount() {
-        return new TransacaoData().transacaoList(transactionDAO).size();
+    public int getItemCount()
+    {
+
+        int total = 0;
+        if (!Build.FINGERPRINT.startsWith("generic") ) {
+            total = new TransacaoData().transacaoList(transactionDAO).size();
+        }
+        else
+            total = new TransacaoData().transacaoList().size();
+
+        return total;
+
     }
 
 

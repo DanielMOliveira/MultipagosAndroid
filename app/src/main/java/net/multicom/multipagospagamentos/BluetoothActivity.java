@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompatSideChannelService;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,14 @@ import stone.utils.PinpadObject;
 public class BluetoothActivity extends Activity implements AdapterView.OnItemClickListener {
 
     ListView bluetoothDevices;
+    BluetoothAdapter mBluetoothAdapter;
     List<BluetoothDevice> bondedDevices;
+    public static int ENABLE_BLUETOOTH = 1;
+    public static int SELECT_PAIRED_DEVICE = 2;
+    public static int SELECT_DISCOVERED_DEVICE = 3;
+
+    //TODO: MElhorar esta parte no futuro
+    public int pairedStringPosition = -1;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,16 +49,27 @@ public class BluetoothActivity extends Activity implements AdapterView.OnItemCli
     }
 
     private void instanceViews() {
+        bluetoothDevices = (ListView) findViewById(R.id.bluetoothDevices);
 
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth não ativado", Toast.LENGTH_SHORT).show();
+        }
+        if (!mBluetoothAdapter.isEnabled()){
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent,ENABLE_BLUETOOTH);
+        }
+        else{ListaDevices();}
+    }
+
+    private void ListaDevices() {
         /**
          * I create it for show only the names
          * all informations are captured on item click
          * see below
          * */
 
-        bluetoothDevices = (ListView) findViewById(R.id.bluetoothDevices);
 
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 
         bondedDevices.addAll(pairedDevices);
@@ -61,23 +80,39 @@ public class BluetoothActivity extends Activity implements AdapterView.OnItemCli
             devicesName.add(bt.getName() + "\n" + getDeviceTypeFromName(bt.getName()));
         }
 
-
-
-        bluetoothDevices.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, devicesName){
+        /* O metodo abaixo serveria para customizar a lista.
+        Vale tratar com mais calma no futuro
+        bluetoothDevices.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, devicesName) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                CheckedTextView textView = (CheckedTextView ) super.getView(position, convertView, parent);
+                CheckedTextView textView = (CheckedTextView) super.getView(position, convertView, parent);
 
-                if (position == 1)
+                if (position == pairedStringPosition)
                     textView.setChecked(true);
 
                 return textView;
             }
         });
+        */
+        bluetoothDevices.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, devicesName));
         bluetoothDevices.setOnItemClickListener(this);
     }
 
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == ENABLE_BLUETOOTH) {
+            if(resultCode == RESULT_OK) {
+
+                Toast.makeText(this,"Bluetooth ativado",Toast.LENGTH_SHORT).show();
+                ListaDevices();
+            }
+            else {
+                Toast.makeText(this,"Sem Bluetooh não é possivel continuar",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
         // get select device in ListView
         BluetoothDevice bluetoothDevice = bondedDevices.get(position);
@@ -96,6 +131,7 @@ public class BluetoothActivity extends Activity implements AdapterView.OnItemCli
 
             public void onSuccess() {
                 Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
+                pairedStringPosition = position;
                 finish(); // kill this activity
             }
 

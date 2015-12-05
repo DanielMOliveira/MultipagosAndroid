@@ -6,4 +6,5 @@
     <dimen name="button_press_elevation">18dp</dimen>
     <dimen name="card_elevation">1dp</dimen>
     <dimen name="card_corner_radius">0dp</dimen>
+    <dimen name="padding_Icone_Detalhe">12dp</dimen>
 </resources>

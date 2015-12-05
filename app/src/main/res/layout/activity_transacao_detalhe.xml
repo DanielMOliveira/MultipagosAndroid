@@ -1,45 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="net.multicom.multipagospagamentos.transacao_detalhe">
+    tools:context="net.multicom.transacao.transacao_detalhe">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout2">
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/txt_ValorTransacao_detalhe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:gravity="center"
+            android:paddingBottom="5dp"
             android:paddingTop="14dp"
-            android:textSize="48dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="R$ 0,50"
-            android:id="@+id/textView"
-            android:layout_gravity="center_horizontal"
+            android:text="R$ 0,00"
             android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:paddingBottom="5dp" />
+            android:textSize="48dp"
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/txt_TipoTransacao_detalhe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="MASTERCARD - DEBITO "
-            android:id="@+id/textView2"
             android:layout_gravity="center_horizontal"
-            android:textColor="@android:color/white"
-            android:paddingBottom="5dp" />
+            android:paddingBottom="5dp"
+            android:text="MASTERCARD - DEBITO "
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
@@ -47,49 +51,26 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="vertical"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/linearLayout2"
-        android:layout_alignParentStart="true">
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="20px" >
+            android:paddingTop="20px">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/iv_StatusTransacao5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:src="@drawable/ic_bluetooth_connect_black_18dp" />
+                android:padding="@dimen/padding_Icone_Detalhe"
+                android:src="@drawable/ic_clipboard_check_black_18dp" />
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="left"
-                android:paddingLeft="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="20px" >
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:src="@drawable/ic_bluetooth_connect_black_18dp" />
-
-            <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/txt_StatusTransacao_detalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -103,39 +84,42 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="20px" >
+            android:paddingTop="20px">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/iv_DataTransacao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:src="@drawable/ic_bluetooth_connect_black_18dp" />
+                android:padding="@dimen/padding_Icone_Detalhe"
+                android:src="@drawable/ic_calendar_black_18dp" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/txt_DataTransacao_detalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:gravity="left"
                 android:paddingLeft="10dp"
+
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="20px" >
+            android:paddingTop="20px">
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/iv_HoraTransacao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:src="@drawable/ic_bluetooth_connect_black_18dp" />
+                android:padding="@dimen/padding_Icone_Detalhe"
+                android:src="@drawable/ic_clock_black_18dp" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/txt_HoraTransacao_detalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -144,42 +128,89 @@
                 android:paddingLeft="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="20px" >
-
+            android:paddingTop="20px">
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/iv_NomeCartao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:src="@drawable/ic_bluetooth_connect_black_18dp" />
-
+                android:padding="@dimen/padding_Icone_Detalhe"
+                android:src="@drawable/ic_account_outline_black_18dp" />
             <TextView
-                android:id="@+id/textView7"
+            android:id="@+id/txt_NomeCartao_detalhe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="left"
+            android:paddingLeft="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/material_grey_600"
+                android:text="TESTE" />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20px">
+            <ImageView
+                android:id="@+id/iv_cartaocredito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_Icone_Detalhe"
+                android:src="@drawable/ic_credit_card_black_18dp" />
+            <TextView
+                android:id="@+id/txt_NumeroCarto_detalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="center_vertical"
                 android:gravity="left"
                 android:paddingLeft="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="TESTE" />
+            />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayoutAutorizacao"
+            android:paddingTop="20px">
+            <ImageView
+                android:id="@+id/iv_autorizacao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_Icone_Detalhe"
+                android:src="@drawable/ic_key_black_18dp" />
+            <TextView
+                android:id="@+id/txt_CodigoAutorizacao_detalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center_vertical"
+                android:gravity="left"
+                android:paddingLeft="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/material_grey_600"
+                android:text="TESTE" />
         </LinearLayout>
         <Button
+            android:id="@+id/btnImprimirDetalhe"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Imprimir"
-            android:id="@+id/button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom|right"
             android:layout_margin="24dp"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:elevation="4dp"
-            android:layout_gravity="bottom|right" />
+            android:text="Imprimir" />
     </LinearLayout>
-
-
 </RelativeLayout>
+
+</ScrollView>
+
