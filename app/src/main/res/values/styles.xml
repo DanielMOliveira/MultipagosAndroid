@@ -2,19 +2,33 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Light">
-        <!-- Customize your theme here. -->
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="android:displayOptions">disableHome</item>
+    <!-- Customize your theme here. -->
+    <item name="android:colorPrimary">@color/colorPrimary</item>
+    <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="android:colorAccent">@color/colorAccent</item>
 
-        <!-- This has to be here to make it work; let me know if you know why -->
-        <item name="actionBarTheme">@style/Theme.AppCompat.Light.Dialog</item>
+    <item name="android:displayOptions">disableHome</item>
+
+    <!-- This has to be here to make it work; let me know if you know why -->
+
+        <item name="android:actionBarTheme">@style/AppTheme.ActionBarTeste</item>
+
+</style>
+
+    <style name="AppTheme.ActionBarTeste" parent="AppTheme">
+        <!-- Customize your theme here. -->
+
+
+        <item name="android:colorForeground">@android:color/white</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+
     </style>
 
-        <style name="Button">
-            <item name="android:textColor">@android:color/white</item>
+
+    <style name="Button">
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:padding">0dp</item>
         <item name="android:minWidth">88dp</item>
         <item name="android:minHeight">36dp</item>

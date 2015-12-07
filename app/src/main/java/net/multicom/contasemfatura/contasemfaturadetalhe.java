@@ -54,7 +54,8 @@ public class contasemfaturadetalhe extends Activity  implements View.OnClickList
     {
         switch (v.getId()) {
             case R.id.btnEfetuarPagamento:
-                testarPagamento();
+                EfetuarPagamento(contaSemFatura.Valor);
+
                 break;
         }
 
@@ -86,13 +87,13 @@ public class contasemfaturadetalhe extends Activity  implements View.OnClickList
 
         }
     }
-    public void testarPagamento() {
+    public void EfetuarPagamento(String Valor ) {
 //TOOD: Testar timeout de pagamento
         // check is there's a pinpad connected
         if (Utils.isConnectedWithPinpad() == true) {
 
             final StoneTransaction stoneTransaction = new StoneTransaction(GlobalInformations.getPinpadFromListAt(0));
-            stoneTransaction.setAmount("50"); // R$ 0,50
+            stoneTransaction.setAmount(Valor); // R$ 0,50
             stoneTransaction.setRequestId("123465789"); // ID in portal
             stoneTransaction.setShortName("MULTIPAGOS"); // name that will appears in stratum client
             stoneTransaction.setInstalmentTransactionEnum(InstalmentTransactionEnum.ONE_INSTALMENT); // transaction "a vista"
@@ -108,7 +109,7 @@ public class contasemfaturadetalhe extends Activity  implements View.OnClickList
                     if (transactionProvider.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
                         Toast.makeText(getApplicationContext(), "Sua transação foi efetuada com sucesso", Toast.LENGTH_LONG).show();
 
-                        finish();
+
                     } else if (transactionProvider.getTransactionStatus() == TransactionStatusEnum.REJECTED) {
                         Toast.makeText(getApplicationContext(), "Sua transação foi rejeitada pelo autorizador", Toast.LENGTH_LONG).show();
                         Toast.makeText(getApplicationContext(), transactionProvider.getMessageFromAuthorize().toString(), Toast.LENGTH_SHORT).show();
@@ -117,10 +118,13 @@ public class contasemfaturadetalhe extends Activity  implements View.OnClickList
                         Toast.makeText(getApplicationContext(), "Houve um erro técnico durante o processamento da transação, tente novamente", Toast.LENGTH_LONG).show();
                     else // DECLINED
                         Toast.makeText(getApplicationContext(), "Sua transação foi negada", Toast.LENGTH_LONG).show();
+
+
                 }
 
 
                 public void onError() {
+                    Toast.makeText(getApplicationContext(), "Houve um erro técnico durante o processamento da transação, tente novamente", Toast.LENGTH_LONG).show();
 
                 }
             });

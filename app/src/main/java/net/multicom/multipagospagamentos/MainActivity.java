@@ -112,6 +112,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
             isListView = true;
         }
     }
+
+    private void toggleLAN(boolean isActive){
+        if (menu != null) {
+       MenuItem item = menu.findItem(R.id.action_toggle1);
+
+            if (isActive)
+                item.setIcon(R.drawable.ic_lan_connect_white_24dp);
+            else
+                item.setIcon(R.drawable.ic_lan_disconnect_white_24dp);
+        }
+    }
+    private void toggleBluetooth(boolean isActive){
+        if (menu != null) {
+        MenuItem item = menu.findItem(R.id.action_toggle2);
+
+            if (isActive)
+                item.setIcon(R.drawable.ic_bluetooth_connect_white_24dp);
+            else
+                item.setIcon(R.drawable.ic_bluetooth_off_white_24dp);
+        }
+    }
+
     /*FIM NAVEGAÇÃO SUPERIOR*/
 
     //ASSOCIA UMA AÇÃO A CADA CLICK
@@ -196,6 +218,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         Boolean possuiinternet = Utils.verificaConexao(manager);
+        toggleLAN(possuiinternet);
 
 /*
         ImageView iv_lan_status = (ImageView)findViewById(R.id.iv_network_status);
@@ -216,6 +239,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (Utils.isConnectedWithPinpad()) {
 
                 DisplayMessageProvider displayMessageProvider = new DisplayMessageProvider(this, "  Multipagos        ELEKTRO          ", GlobalInformations.getPinpadFromListAt(0));
+                displayMessageProvider.setDialogTitle("Multipagos");
                 displayMessageProvider.setConnectionCallback(new StoneCallbackInterface() {
                     public void onSuccess() {
 
@@ -225,22 +249,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(getApplicationContext(), "A conexão com o Pinpad foi perdida", Toast.LENGTH_LONG).show();
                     }
                 });
-
+                displayMessageProvider.execute();
                 //imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_connect_white_24dp);
-
-
-
-                btnTransactionsButton.setEnabled(true);
                 //Sem pagamento de arrecadacao neste momento
                 btnPagarArrecadacao.setEnabled(false);
                 btnPagarArrecadacao.setBackgroundColor(Color.GRAY);
 
                 btnContasemFatura.setEnabled(true);
-
                 btnContasemFatura.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                btnTransactionsButton.setEnabled(true);
                 btnTransactionsButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                btnPagarArrecadacao.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                //displayMessageProvider.execute();
+
+                toggleBluetooth(true);
 
             }
             else
@@ -254,7 +275,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     //btnTransactionsButton.setEnabled(false);
                     btnPagarArrecadacao.setEnabled(false);
                     //btnContasemFatura.setEnabled(false);
+
                 }
+                toggleBluetooth(true);
 
             }
 

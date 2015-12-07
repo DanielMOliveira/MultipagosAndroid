@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/MenuPrincipal">
+
+    <item
+        android:id="@+id/action_toggle2"
+        android:icon="@drawable/ic_bluetooth_connect_white_24dp"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="80"
+        android:title="Status Bluetooth"/>
+
+    <item
+        android:id="@+id/action_toggle1"
+        android:icon="@drawable/ic_lan_connect_white_24dp"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="90"
+        android:title="Status Rede"/>
 
     <item
         android:id="@+id/action_toggle"
         android:icon="@drawable/ic_action_grid"
-        android:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:orderInCategory="100"
-        android:title="Show as grid" />
+        android:title="Show as grid">
+
+
+        </item>
+
 
 </menu>

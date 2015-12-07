@@ -9,12 +9,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import net.multicom.multipagospagamentos.R;
 import net.multicom.transacao.TransacaoListAdapter;
 import net.multicom.transacao.transacao_detalhe;
 
-public class ConsultarContaSemFatura extends Activity {
+public class ConsultarContaSemFatura extends Activity implements View.OnClickListener{
 
     private Menu menu;
     private boolean isListView;
@@ -41,9 +44,12 @@ public class ConsultarContaSemFatura extends Activity {
         mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
 
-        mAdapter = new ContaSemFaturaListAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(onItemClickListener);
+
+
+
+
+
+        ((Button)findViewById(R.id.btnConsultarCSF)).setOnClickListener(this);
     }
 
     @Override
@@ -53,7 +59,30 @@ public class ConsultarContaSemFatura extends Activity {
 
 
     }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
 
+            case R.id.btnConsultarCSF:
+                CarregarContaSemFatura();
+                break;
+
+
+        }
+    }
+
+    public void CarregarContaSemFatura(){
+        mAdapter = new ContaSemFaturaListAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(onItemClickListener);
+        if (mAdapter.getItemCount() == 0)
+            ((TextView)findViewById(R.id.lblContaSemFatura)).setVisibility(View.VISIBLE);
+        else{
+            ((TableLayout)findViewById(R.id.TableLayoutContaSemFatura)).setVisibility(View.VISIBLE);
+        }
+
+
+    }
 
     ContaSemFaturaListAdapter.OnItemClickListener onItemClickListener = new ContaSemFaturaListAdapter.OnItemClickListener() {
         @Override
