@@ -11,21 +11,18 @@
         android:showAsAction="ifRoom"
         android:orderInCategory="80"
         android:title="Status Bluetooth"/>
-
     <item
         android:id="@+id/action_toggle1"
         android:icon="@drawable/ic_lan_connect_white_24dp"
         android:showAsAction="ifRoom"
         android:orderInCategory="90"
         android:title="Status Rede"/>
-
     <item
         android:id="@+id/action_toggle"
-        android:icon="@drawable/ic_action_grid"
-        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="always"
         android:orderInCategory="100"
-        android:title="Show as grid">
-
+        android:title="Configuracoes">
 
         </item>
 

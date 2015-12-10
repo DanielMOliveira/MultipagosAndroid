@@ -55,17 +55,6 @@ tools:context=".MainActivity">
         style="@style/Button"
         android:padding="8dp"/>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="343dp"
-        android:layout_height="wrap_content"
-        android:text="Testar Pagamento"
-        android:id="@+id/button2"
-
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal" />
-
 
 </LinearLayout>
 

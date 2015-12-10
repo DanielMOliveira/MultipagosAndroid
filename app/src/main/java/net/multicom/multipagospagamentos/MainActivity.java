@@ -1,10 +1,6 @@
 package net.multicom.multipagospagamentos;
 
 import android.app.Activity;
-
-/*
-* referencia principal http://www.raywenderlich.com/103367/material-design
-* */
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,7 +33,12 @@ import stone.user.UserModel;
 import stone.utils.GlobalInformations;
 import stone.utils.StoneTransaction;
 
+/*
+* referencia principal http://www.raywenderlich.com/103367/material-design
+* */
+
 public class MainActivity extends Activity implements View.OnClickListener {
+
 
     private Menu menu;
     private boolean isListView;
@@ -51,9 +52,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-            getActionBar().setSubtitle("Elektro");
 
+
+        setUpActionBar();
         instanceViews();
+
+
     }
 
 
@@ -69,10 +73,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnTransactionsButton.setOnClickListener(this);
         btnContasemFatura.setOnClickListener(this);
         btnPagarArrecadacao.setOnClickListener(this);
-        ((Button)findViewById(R.id.button2)).setOnClickListener(this);
+
     }
 
     private void setUpActionBar(){
+        getActionBar().setSubtitle("Elektro");
+
 
     }
 
@@ -91,26 +97,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if (id == R.id.action_toggle){
-            toggle();
-            return true;
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
+
+
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void toggle()
-    {
-        MenuItem item = menu.findItem(R.id.action_toggle);
-        if (isListView) {
-            item.setIcon(R.drawable.ic_action_list);
-            item.setTitle("Show as list");
-
-            isListView = false;
-        } else {
-            item.setIcon(R.drawable.ic_action_grid);
-            item.setTitle("Show as grid");
-
-            isListView = true;
-        }
     }
 
     private void toggleLAN(boolean isActive){
@@ -151,10 +143,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(intent);
                 break;
 
-            case R.id.button2:
-                this.testarPagamento();
+           /* case R.id.button2:
+                Toast.makeText(this,"Button Clicked",Toast.LENGTH_LONG).show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        OWBMultiPagosHomolog service = new OWBMultiPagosHomolog();
+                        try {
+                            String operadoras = service.ObterOperadoras(101).firstElement().getProperty(0).toString();
+                            Log.i("Resultado WS",operadoras);
+                        } catch (Exception e) {
+                            e.printStackTrace();
 
-                break;
+                        }
+                   }
+                }).start();
+
+
+
+                break;*/
 /*
             case R.id.btnPagamentoBoleto:
                 Intent intent1 = new Intent(this, CodigoInstalacao.class);
