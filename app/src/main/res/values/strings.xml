@@ -18,9 +18,7 @@
     <string name="pref_header_general">Configurações Basicas</string>
 
     <string name="SwitchPreference_tittle">Ativar Modo Debug</string>
-    <string name="SwitchPreference_sumary">Modo Debug. Só utilizar para demonstrações e sobre surpervisão.
-    </string>
-
+    <string name="SwitchPreference_sumary">Modo Debug.</string>
 
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
@@ -67,4 +65,5 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_conta_sem_fatura_detalhe2">Conta Sem Fatura - Detalhe</string>
 </resources>

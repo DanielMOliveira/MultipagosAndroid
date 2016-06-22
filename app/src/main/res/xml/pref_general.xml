@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="example_switch"
         android:summary="@string/SwitchPreference_sumary"/>
 
@@ -9,7 +9,8 @@
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="PDV ID"
+        android:summary="Numero PDV Multipagos"
+        android:dialogTitle="Informe o numero do PDV"
         android:inputType="textCapWords"
         android:key="pdv_id"
         android:maxLines="1"
@@ -17,17 +18,16 @@
         android:singleLine="true"
         android:title="Numero PDV Multipagos" />
 
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="Stone Code"
+        android:summary="Chave de acesso"
+        android:dialogTitle="Chave de acesso do PDV"
         android:inputType="textCapWords"
-        android:key="stone_code"
+        android:key="pdv_Chave"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="Codigo no TEF" />
+        android:title="Chave de acesso do PDV no multipagos" />
+
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->

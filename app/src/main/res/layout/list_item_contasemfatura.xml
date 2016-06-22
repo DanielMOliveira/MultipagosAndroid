@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Name Label -->
+    <TextView
+        android:id="@+id/CodigoConta"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dip"
+        android:paddingTop="6dip"
+        android:text="Codigo Conta"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Email label -->
+    <TextView
+        android:id="@+id/Vencimento"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dip"
+        android:text="Data Vencimento" />
+
+    <!-- Mobile number label -->
+    <TextView
+        android:id="@+id/ValorDevido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="Valor: " />
+
+</LinearLayout>

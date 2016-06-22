@@ -88,6 +88,8 @@ public class TransacoesExibir extends Activity {
         public void onItemClick(View view, int position) {
             Intent intent = new Intent(TransacoesExibir.this, transacao_detalhe.class);
             intent.putExtra(transacao_detalhe.EXTRA_PARAM_ID, position);
+            intent.putExtra("transacao",mAdapter.get(position));
+            intent.putExtra("Origem","TransacoesExibir");
             startActivity(intent);
         }
     };

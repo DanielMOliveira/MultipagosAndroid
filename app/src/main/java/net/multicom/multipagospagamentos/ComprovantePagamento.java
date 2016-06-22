@@ -26,7 +26,13 @@ public class ComprovantePagamento {
             String[] hour = transactionObject.Hora.split(":");
             String dateHour = String.format("%s/%s/%s %s:%s", new Object[]{date[2], date[1], date[0], hour[0], hour[1]});
             String dividerLine = "________________________";
-            Double amountAsDouble = Double.valueOf(Double.parseDouble(transactionObject.Valor) / 100.0D);
+            Double amountAsDouble;
+            try {
+                amountAsDouble = Double.valueOf(Double.parseDouble(transactionObject.Valor) / 100.0D);
+            }
+            catch (Exception ex) {
+                amountAsDouble = Double.parseDouble(transactionObject.Valor.replace(",","."));
+            }
             DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
             listToPrint.add(new PrintObject("Credenciadora Banco PAN", PrintObject.SMALL, PrintObject.CENTER));
             listToPrint.add(new PrintObject("MULTIPAGOS ARRECADAÇÃO DIGITAL", PrintObject.BIG, PrintObject.CENTER));
@@ -40,9 +46,18 @@ public class ComprovantePagamento {
 
             listToPrint.add(new PrintObject("ELEKTRO", PrintObject.BIG, PrintObject.LEFT));
             listToPrint.add(new PrintObject(" ", PrintObject.BIG, PrintObject.CENTER));
-            listToPrint.add(new PrintObject("Codigo de Barras:", PrintObject.MEDIUM, PrintObject.LEFT));
-            listToPrint.add(new PrintObject("86680000002-2 54091557856-6", PrintObject.MEDIUM, PrintObject.LEFT));
-            listToPrint.add(new PrintObject("90057519408-0 10061000000-0", PrintObject.MEDIUM, PrintObject.LEFT));
+
+            try {
+                listToPrint.add(new PrintObject("Codigo de Barras:", PrintObject.MEDIUM, PrintObject.LEFT));
+                listToPrint.add(new PrintObject(transactionObject.GetCodigoBarras(), PrintObject.INGENICO_SMALL, PrintObject.LEFT));
+
+            listToPrint.add(new PrintObject("Unidade Consumidora:", PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject(transactionObject.GetUnidadeConsumidora(), PrintObject.INGENICO_SMALL, PrintObject.LEFT));
+            }
+            catch(Exception ex){}
+            //listToPrint.add(new PrintObject("86680000002-2 54091557856-6", PrintObject.MEDIUM, PrintObject.LEFT));
+            //listToPrint.add(new PrintObject("90057519408-0 10061000000-0", PrintObject.MEDIUM, PrintObject.LEFT));
+
             listToPrint.add(new PrintObject(" ", PrintObject.MEDIUM, PrintObject.CENTER));
             if (decimalFormat.format(amountAsDouble).length() == 3) {
                 listToPrint.add(new PrintObject("Valor Pago: R$ 0" + decimalFormat.format(amountAsDouble), PrintObject.MEDIUM, PrintObject.LEFT));
@@ -51,12 +66,17 @@ public class ComprovantePagamento {
             }
             listToPrint.add(new PrintObject("Pagamento  :" + transactionObject.Data.toString(), PrintObject.MEDIUM, PrintObject.LEFT));
             listToPrint.add(new PrintObject("Autorização:" + transactionObject.authorizationCode, PrintObject.MEDIUM, PrintObject.LEFT));
-            listToPrint.add(new PrintObject("NSU        :000X", PrintObject.MEDIUM, PrintObject.LEFT));
+            listToPrint.add(new PrintObject("NSU        :" + transactionObject.authorizationCode, PrintObject.MEDIUM, PrintObject.LEFT));
 
             listToPrint.add(new PrintObject(dividerLine, PrintObject.BIG, PrintObject.CENTER));
             listToPrint.add(new PrintObject("** VIA CLIENTE **", PrintObject.SMALL, PrintObject.CENTER));
             listToPrint.add(new PrintObject("STONE - VIA CLIENTE", PrintObject.SMALL, PrintObject.CENTER));
-            listToPrint.add(new PrintObject(String.format("%s - %s", new Object[]{transactionObject.cardBrand.toString(), "DEBITO A VISTA"}), PrintObject.MEDIUM, PrintObject.CENTER));
+            try {
+                listToPrint.add(new PrintObject(String.format("%s - %s", new Object[]{transactionObject.cardBrand.toString(), "DEBITO A VISTA"}), PrintObject.MEDIUM, PrintObject.CENTER));
+            }
+            catch(Exception ex){
+                listToPrint.add(new PrintObject(String.format("%s - %s", new Object[]{transactionObject.CardBrandName, "DEBITO A VISTA"}), PrintObject.MEDIUM, PrintObject.CENTER));
+            }
             listToPrint.add(new PrintObject(String.format("%s %s ", new Object[]{transactionObject.cardHolderNumber, dateHour}), PrintObject.SMALL, PrintObject.LEFT));
             listToPrint.add(new PrintObject("STONE ID: " + transactionObject.RecipientTransactionIdentification, PrintObject.MEDIUM, PrintObject.LEFT));
             listToPrint.add(new PrintObject(dividerLine, PrintObject.BIG, PrintObject.CENTER));

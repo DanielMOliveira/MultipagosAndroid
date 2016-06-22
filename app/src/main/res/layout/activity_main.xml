@@ -55,7 +55,6 @@ tools:context=".MainActivity">
         style="@style/Button"
         android:padding="8dp"/>
 
-
 </LinearLayout>
 
    </ScrollView>

@@ -56,6 +56,14 @@
                 android:value="net.multicom.multipagospagamentos.MainActivity" />
         </activity>
         <activity
+            android:name="net.multicom.contasemfatura.testecontasemfatura"
+            android:label="@string/title_activity_actvity__consultar_conta_sem_fatura"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.multicom.multipagospagamentos.MainActivity" />
+        </activity>
+        <activity
             android:name="net.multicom.contasemfatura.ConsultarContaSemFatura"
             android:label="@string/title_activity_actvity__consultar_conta_sem_fatura"
             android:parentActivityName=".MainActivity">
@@ -64,9 +72,9 @@
                 android:value="net.multicom.multipagospagamentos.MainActivity" />
         </activity>
         <activity
-            android:name="net.multicom.contasemfatura.contasemfaturadetalhe"
+            android:name="net.multicom.contasemfatura.ContaSemFaturaDetalhe"
             android:label="@string/title_activity_contasemfaturadetalhe"
-            android:parentActivityName="net.multicom.contasemfatura.ConsultarContaSemFatura">
+            android:parentActivityName="net.multicom.transacao.TransacoesExibir">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.multicom.contasemfatura.ConsultarContaSemFatura" />
@@ -78,6 +86,28 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.multicom.multipagospagamentos.MainActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".ContaSemFaturaDetalhe2"
+            android:label="@string/title_activity_conta_sem_fatura_detalhe2"
+            android:parentActivityName="net.multicom.transacao.TransacoesExibir">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.multicom.contasemfatura.ConsultarContaSemFatura" />
         </activity>
     </application>
 

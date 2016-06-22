@@ -2,17 +2,17 @@ package net.multicom.contasemfatura;
 
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.multicom.multipagospagamentos.R;
-import net.multicom.transacao.Transacao;
-import net.multicom.transacao.TransacaoData;
+
+import java.util.List;
 
 import stone.database.transaction.TransactionDAO;
 
@@ -24,10 +24,22 @@ public class ContaSemFaturaListAdapter extends RecyclerView.Adapter<ContaSemFatu
     Context mContext;
     OnItemClickListener mItemClickListener;
     TransactionDAO transactionDAO;
-
+    String CodigoCliente;
+    String url;
+    ContaSemFaturaData csfData;
+    List<ContaSemFatura> listContaSemFatura;
     // 2
-    public ContaSemFaturaListAdapter(Context context) {
+    public ContaSemFaturaListAdapter(Context context,String CodigoCliente) {
         this.mContext = context;
+        this.CodigoCliente = CodigoCliente;
+
+        //transactionDAO = new TransactionDAO(this.mContext);
+    }
+
+    public ContaSemFaturaListAdapter(Context context,List<ContaSemFatura> Contas) {
+        this.mContext = context;
+        this.listContaSemFatura = Contas;
+
         //transactionDAO = new TransactionDAO(this.mContext);
     }
 
@@ -40,37 +52,30 @@ public class ContaSemFaturaListAdapter extends RecyclerView.Adapter<ContaSemFatu
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        final int pos = position;
         //TODO: Caso esteja zerada como fazer?
+        ContaSemFatura conta = listContaSemFatura.get(position);
 
-        final ContaSemFatura csf;
-        if (!Build.FINGERPRINT.startsWith("generic") ) {
+        holder.CodigoConta.setText(conta.getCodigoConta());
+        holder.DataVencimento.setText(conta.getDataVencimento());
+        holder.Valor.setText("R$ " + conta.getValor());
+        holder.chkSelected.setChecked(conta.getIsSelected());
 
-            //TODO: Configurar para buscar do ws
-            csf = new ContaSemFaturaData().ContaSemFaturaList().get(position);
-        }
-       else
-            csf = new ContaSemFaturaData().ContaSemFaturaList().get(position);
+        holder.chkSelected.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                CheckBox cb = (CheckBox) v;
 
+                listContaSemFatura.get(pos).setSelected(cb.isChecked());
 
-        holder.CodigoConta.setText(csf.CodigoConta);
-        holder.DataVencimento.setText(csf.DataVencimento);
-        holder.Valor.setText("R$ " + csf.Valor);
+            }
+        });
 
     }
 
     @Override
     public int getItemCount()
     {
-
-        int total = 0;
-        if (!Build.FINGERPRINT.startsWith("generic") ) {
-            total = new ContaSemFaturaData().ContaSemFaturaList().size();
-        }
-        else
-            total = new ContaSemFaturaData().ContaSemFaturaList().size();
-
-        return total;
-
+        return (null != listContaSemFatura ? listContaSemFatura.size() : 0);
     }
 
 
@@ -81,6 +86,7 @@ public class ContaSemFaturaListAdapter extends RecyclerView.Adapter<ContaSemFatu
         public TextView CodigoConta;
         public TextView DataVencimento;
         public TextView Valor;
+        public CheckBox chkSelected;
 
 
         public ViewHolder(View itemView) {
@@ -90,6 +96,7 @@ public class ContaSemFaturaListAdapter extends RecyclerView.Adapter<ContaSemFatu
             CodigoConta = (TextView) itemView.findViewById(R.id.txt_Codico_CSF);
             DataVencimento = (TextView) itemView.findViewById(R.id.txt_DataVencimento_CSF);
             Valor = (TextView) itemView.findViewById(R.id.txt_Valor_CSF);
+            chkSelected = (CheckBox) itemView.findViewById(R.id.chkSelected);
 
             placeHolder.setOnClickListener(this);
         }
@@ -110,4 +117,6 @@ public class ContaSemFaturaListAdapter extends RecyclerView.Adapter<ContaSemFatu
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
     }
+
+
 }

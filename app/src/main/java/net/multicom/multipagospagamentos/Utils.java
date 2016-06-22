@@ -3,6 +3,8 @@ package net.multicom.multipagospagamentos;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -69,6 +71,29 @@ public class Utils {
             }
         }
         return true;
+    }
+
+    public static String GetPDVID (Context context){
+        String pdvID = PreferenceManager.getDefaultSharedPreferences(context).getString("pdv_id","00");
+        return pdvID;
+    }
+
+    public static boolean ValidaConfiguracao(Boolean possuiinternet, Boolean possuiBluettoh,Integer pdvID,Context context) {
+        String data = "";
+        if (!possuiBluettoh)
+            data = data + "\n" + "Sem conexão bluetooth";
+        if (!possuiinternet)
+            data = data + "\n" + "Sem conexão a internet";
+
+        if (pdvID == 99 || pdvID == 0)
+            data = data +"\n" + "Numero de PDV invalido.";
+
+        if (data != "") {
+            Toast.makeText(context, "A aplicação apresentou o(s) seguinte(s) problema(s):" + data, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else
+            return true;
     }
 
 }

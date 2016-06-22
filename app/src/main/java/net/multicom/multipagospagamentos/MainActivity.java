@@ -25,8 +25,10 @@ import stone.application.enums.InstalmentTransactionEnum;
 import stone.application.enums.TransactionStatusEnum;
 import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneCallbackInterface;
+import stone.cache.ApplicationCache;
 import stone.providers.ActiveApplicationProvider;
 import stone.providers.DisplayMessageProvider;
+import stone.providers.DownloadTablesProvider;
 import stone.providers.TransactionProvider;
 import stone.user.Partner;
 import stone.user.UserModel;
@@ -46,6 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button btnPinpadsButton;
     private Button btnContasemFatura;
     private Button btnPagarArrecadacao;
+    private Button btnteste;
 
     private final String STONE_CODE = "505986781"; // your Stone Code
     @Override
@@ -69,10 +72,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnTransactionsButton = (Button)findViewById(R.id.btnTransactionsButton);
         btnPagarArrecadacao = (Button)findViewById(R.id.btnPagamentoBoleto);
 
+
         btnPinpadsButton.setOnClickListener(this);
         btnTransactionsButton.setOnClickListener(this);
         btnContasemFatura.setOnClickListener(this);
         btnPagarArrecadacao.setOnClickListener(this);
+
 
     }
 
@@ -142,36 +147,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(this,TransacoesExibir.class);
                 startActivity(intent);
                 break;
-
-           /* case R.id.button2:
-                Toast.makeText(this,"Button Clicked",Toast.LENGTH_LONG).show();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        OWBMultiPagosHomolog service = new OWBMultiPagosHomolog();
-                        try {
-                            String operadoras = service.ObterOperadoras(101).firstElement().getProperty(0).toString();
-                            Log.i("Resultado WS",operadoras);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                        }
-                   }
-                }).start();
-
-
-
-                break;*/
-/*
-            case R.id.btnPagamentoBoleto:
-                Intent intent1 = new Intent(this, CodigoInstalacao.class);
-                startActivity(intent1);
-                break;
-                 */
             case R.id.btnContaSemFatura:
                 Intent intent2 = new Intent(this, ConsultarContaSemFatura.class);
                 startActivity(intent2);
                 break;
+
+
 
 
         }
@@ -185,8 +166,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // UserModel represent all user in cache, get it just to check if is != null
         List<UserModel> userModels = StoneStart.init(this);
 
-
-
         // if userModels == null, your SDK has not been activated, yet.
         // if userModels != null, you don't need do nothing.5
         if (userModels == null) {
@@ -194,9 +173,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             // the SDK can active multi merchants.
             // But in this case, we'll use only one Stone code
             List<String> stoneCodeList = new ArrayList<>();
-            stoneCodeList.add(STONE_CODE);
-
-            final ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
+            stoneCodeList.add(STONE_CODE);            final ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(this, stoneCodeList);
 
             // by default, all 'providers' work in background
             // but if you want give to your user a feedback, pass false in this method
@@ -218,26 +195,45 @@ public class MainActivity extends Activity implements View.OnClickListener {
             activeApplicationProvider.execute(); // call this method to run the provider
         }
         else{
-            Partner partnerDeveloper = new Partner(userModels.get(0));
+           Partner partnerDeveloper = new Partner(userModels.get(0));
             userModels.set(0,partnerDeveloper);
             GlobalInformations.sessionApplication.setUserModelList(userModels);
+            ApplicationCache applicationCache = new ApplicationCache(getApplicationContext());
+            //if (applicationCache.checkIfHasTables() == false) {
+                DownloadTablesProvider downloadTablesProvider = new DownloadTablesProvider(this,userModels.get(0));
+                downloadTablesProvider.setDialogMessage("Baixando tabelas, por favor aguarde");
+                downloadTablesProvider.setWorkInBackground(false);
+                downloadTablesProvider.setConnectionCallback(new StoneCallbackInterface() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(getApplicationContext(), "Downbload de tabelas efetuado com sucesso.", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(getApplicationContext(), "Erro na ativação, verifique o erro na documentação: ", Toast.LENGTH_LONG).show();
+                    }
+                });
+            //}
+
+
+
         }
+
+        /*
+        * Validações de segurança
+        * O aplicativo só pode iniciar o fluxo se:
+        * 1) Estiver conectado a internet
+        * 2) Estiver conectado a um pinpad
+        * 3) O PDV id estiver configurado
+        * */
+
+        Integer pdvID = Integer.parseInt(Utils.GetPDVID(getApplicationContext()));
 
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         Boolean possuiinternet = Utils.verificaConexao(manager);
+        Boolean possuiBluettoh = true;
         toggleLAN(possuiinternet);
-
-/*
-        ImageView iv_lan_status = (ImageView)findViewById(R.id.iv_network_status);
-        if (!possuiinternet)
-            iv_lan_status.setImageResource(R.drawable.ic_lan_disconnect_white_24dp);
-        else
-            iv_lan_status.setImageResource(R.drawable.ic_lan_connect_white_24dp);
-
-
-        ImageView imageViewBluetoothStatus = (ImageView)findViewById(R.id.iv_bluetooth_status);
-        imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_off_white_24dp);
-*/
 
 
         if (Utils.verificaConexao(manager))
@@ -261,15 +257,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 //Sem pagamento de arrecadacao neste momento
                 btnPagarArrecadacao.setEnabled(false);
                 btnPagarArrecadacao.setBackgroundColor(Color.GRAY);
+                possuiBluettoh = true;
+                toggleBluetooth(possuiBluettoh);
+                if (possuiinternet && possuiBluettoh) {
 
-                btnContasemFatura.setEnabled(true);
-                btnContasemFatura.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                    btnContasemFatura.setEnabled(true);
+                    btnContasemFatura.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
-                btnTransactionsButton.setEnabled(true);
-                btnTransactionsButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                    btnTransactionsButton.setEnabled(true);
+                    btnTransactionsButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
-                toggleBluetooth(true);
 
+                }
             }
             else
             {
@@ -279,17 +278,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     btnTransactionsButton.setBackgroundColor(Color.GRAY);
                     btnPagarArrecadacao.setBackgroundColor(Color.GRAY);
 
-                    //btnTransactionsButton.setEnabled(false);
+                    btnTransactionsButton.setEnabled(false);
                     btnPagarArrecadacao.setEnabled(false);
-                    //btnContasemFatura.setEnabled(false);
+                    btnContasemFatura.setEnabled(false);
+                    toggleBluetooth(false);
+                    possuiBluettoh = false;
 
                 }
-                toggleBluetooth(true);
+
 
             }
 
+        Utils.ValidaConfiguracao(possuiinternet, possuiBluettoh, pdvID, getApplicationContext());
+
+
+
 
     }
+
+
 
     public void testarPagamento() {
 //TOOD: Testar timeout de pagamento
@@ -297,7 +304,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (Utils.isConnectedWithPinpad() == true) {
 
                 final StoneTransaction stoneTransaction = new StoneTransaction(GlobalInformations.getPinpadFromListAt(0));
-                stoneTransaction.setAmount("50"); // R$ 0,50
+                stoneTransaction.setAmount("" +
+                        ""); // R$ 0,50
                 stoneTransaction.setRequestId("123465789"); // ID in portal
                 stoneTransaction.setShortName("MULTIPAGOS"); // name that will appears in stratum client
                 stoneTransaction.setInstalmentTransactionEnum(InstalmentTransactionEnum.ONE_INSTALMENT); // transaction "a vista"

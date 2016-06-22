@@ -7,16 +7,10 @@ import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompatSideChannelService;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -145,7 +139,7 @@ public class BluetoothActivity extends Activity implements AdapterView.OnItemCli
     }
 
     private String getDeviceTypeFromName(String name){
-        if (name.contains("D210") || name.toLowerCase().contains("stone"))
+        if (name.contains("D210") || name.toLowerCase().contains("stone")|| name.toLowerCase().contains("ingenico"))
             return "PINPAD";
         else {
             return "Bluetooth";

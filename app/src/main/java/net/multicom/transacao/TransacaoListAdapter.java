@@ -1,6 +1,7 @@
 package net.multicom.transacao;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import net.multicom.multipagospagamentos.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import stone.database.transaction.TransactionDAO;
 
@@ -22,11 +25,60 @@ public class TransacaoListAdapter extends RecyclerView.Adapter<TransacaoListAdap
     Context mContext;
     OnItemClickListener mItemClickListener;
     TransactionDAO transactionDAO;
+    List<Transacao> transacaoList = new ArrayList<Transacao>();
 
     // 2
     public TransacaoListAdapter(Context context) {
         this.mContext = context;
         transactionDAO = new TransactionDAO(this.mContext);
+        Cursor cursor = new GerenciadorTransacao(context).GetTransacao();
+        if (cursor != null){
+            if (cursor.moveToFirst()){
+                do {
+                    Transacao t = new Transacao();
+                    /*
+                    * values.put("Tipo",Tipo);
+        values.put("Data",Data);
+        values.put("Hora",Hora);
+        values.put("Cartao",Cartao);
+        values.put("Status",Status);
+        values.put("Valor",Valor);
+        values.put("timeToPassTransaction",timeToPassTransaction);
+        values.put("cardHolderNumber",cardHolderNumber);
+        values.put("cardHolderName",cardHolderName);
+        values.put("authorizationCode",authorizationCode);
+        values.put("pinpadUsed",pinpadUsed);
+        values.put("cardBrand",cardBrand);
+        values.put("cardBrand",cardBrand);
+        values.put("RecipientTransactionIdentification",RecipientTransactionIdentification);
+        values.put("CodigoBarras",CodigoBarras);
+        values.put("UnidadeConsumidora",UnidadeConsumidora);
+        values.put("Comprovante",Comprovante);*/
+                    t.Tipo = cursor.getString(1);
+                    t.Data = cursor.getString(2);
+                    t.Hora = cursor.getString(3);
+                    t.Cartao = cursor.getString(4);
+                    t.Status = cursor.getString(5);
+                    t.Valor = cursor.getString(6);
+                    t.timeToPassTransaction = cursor.getString(7);
+                    t.cardHolderNumber = cursor.getString(8);
+                    t.cardHolderName = cursor.getString(9);
+                    t.authorizationCode = cursor.getString(10);
+                    t.pinpadUsed = cursor.getString(11);
+                    t.CardBrandName = cursor.getString(12);
+                    t.RecipientTransactionIdentification = cursor.getString(13);
+                    t.CodigoBarras = cursor.getString(14);
+                    t.UnidadeConsumidora = cursor.getString(15);
+
+
+
+
+                    transacaoList.add(t);
+                }while (cursor.moveToNext());
+            }
+        }
+
+        //transacaoList = new GerenciadorTransacao(context).GetTransacao();
     }
 
     @Override
@@ -43,14 +95,19 @@ public class TransacaoListAdapter extends RecyclerView.Adapter<TransacaoListAdap
         final Transacao transacao;
         if (!Build.FINGERPRINT.startsWith("generic") ) {
 
-            transacao = new TransacaoData().transacaoList(transactionDAO).get(position);
+            transacao = transacaoList.get(position);
         }
        else
             transacao = new TransacaoData().transacaoList().get(position);
 
         holder.Data.setText(transacao.Data);
         holder.Hora.setText(transacao.Hora);
-        holder.Valor.setText("R$ " + transacao.Valor);
+        try {
+            holder.Valor.setText("R$ " + String.format("%.2f", Double.parseDouble(transacao.Valor) / 100));
+        }
+        catch (Exception ex){
+            holder.Valor.setText("R$ " +transacao.Valor);
+        }
         holder.Tipo.setText("Debito a vista");
         holder.Status.setText(transacao.Status);
 
@@ -62,13 +119,17 @@ public class TransacaoListAdapter extends RecyclerView.Adapter<TransacaoListAdap
 
         int total = 0;
         if (!Build.FINGERPRINT.startsWith("generic") ) {
-            total = new TransacaoData().transacaoList(transactionDAO).size();
+            total = transacaoList.size();
         }
         else
             total = new TransacaoData().transacaoList().size();
 
         return total;
 
+    }
+
+    public Transacao get(int position){
+        return transacaoList.get(position);
     }
 
 

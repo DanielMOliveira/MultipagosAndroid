@@ -21,6 +21,7 @@ public class TransacaoData {
 
     public static ArrayList<Transacao> transacaoList() {
         ArrayList<Transacao> list = new ArrayList<>();
+
         for (int i = 0; i < 25; i++) {
             Random rnd = new Random();
             int numero = rnd.nextInt(30);

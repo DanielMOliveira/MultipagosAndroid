@@ -1,78 +1,70 @@
 package net.multicom.contasemfatura;
 
+import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import net.multicom.WebServiceCall.WebRequest;
+import net.multicom.multipagospagamentos.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Random;
-
 
 /**
- * Created by Daniel on 04/12/2015.
+ * Created by Daniel on 20/01/2016.
  */
-public class ContaSemFaturaData {
+public class testecontasemfatura extends ListActivity implements View.OnClickListener {
+
+    // URL to get contacts JSON
+
 
     // JSON Node names
-    private final String TAG_ContaSemFaturaArray = "";
-    private final String TAG_ID = "id";
-    private final String TAG_codigoFatura = "codigoFatura";
-    private final String TAG_dataVencimento = "dataVencimento";
-    private final String TAG_valor = "valor";
-    private final String TAG_codigoBarras = "codigoBarras";
-    String  CodigoCliente;
-    String  url;
-    Context mContext;
-    String jsonStr;
-    ArrayList<ContaSemFatura> list = new ArrayList<ContaSemFatura>();
+    // JSON Node names
+    private static final String TAG_ContaSemFaturaArray = "";
+    private static final String TAG_ID = "id";
+    private static final String TAG_codigoFatura = "codigoFatura";
+    private static final String TAG_dataVencimento = "dataVencimento";
+    private static final String TAG_valor = "valor";
+    private static final String TAG_codigoBarras = "codigoBarras";
+    String Codigo = "";
+    private String url = "http://webapiproxymultipagos.azurewebsites.net/api/pdv/ConsultarContasSemFatura?CodigoCliente="+Codigo+"&pdvID=99";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    public ContaSemFaturaData(Context context,String CodigoCliente){
-        this.mContext= context;
-        url = "http://webapiproxymultipagos.azurewebsites.net/api/pdv/ConsultarContasSemFatura?CodigoCliente="+CodigoCliente+"&pdvID=99";
-        // Creating service handler class instance
-        this.CodigoCliente = CodigoCliente;
-        new GetStudents().execute();
-    }
-    public ArrayList<ContaSemFatura> ContaSemFaturaListWS(){
-
-
-
-        return (list);
-
+        setContentView(R.layout.activity_testecontasemfatura);
+        ((Button)findViewById(R.id.btnConsultarCSF_Teste)).setOnClickListener(this);
 
     }
-    public ArrayList<ContaSemFatura> ContaSemFaturaList() {
-        ArrayList<ContaSemFatura> list = new ArrayList<ContaSemFatura>();
-        for (int i = 0; i < 25; i++) {
-            Random rnd = new Random();
-            int numero = rnd.nextInt(30);
-            Date d = new Date();
-            SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
 
-            ContaSemFatura csf = new ContaSemFatura();
-            csf.setCodigoConta("0000" + numero);
-            csf.setUnidadeConsumidora(numero + "0000" + numero * 2);
-            csf.setCliente("Cliente Jose das couves");
-            csf.setDataVencimento(data.format(d));
-            csf.setDataPagamento("");
-            csf.setCodigodeBarras("00000.00000.00000.000000.00000");
-            csf.setValor(String.valueOf((numero * numero) * 30 / 60 * 15 / 100));
-            list.add(csf);
+            case R.id.btnConsultarCSF_Teste:
+                Codigo = ((TextView)findViewById(R.id.txtCodigoUnidade2)).getText().toString();
+                url = "http://webapiproxymultipagos.azurewebsites.net/api/pdv/ConsultarContasSemFatura?CodigoCliente="+Codigo+"&pdvID=99";
+                new GetStudents().execute();
+                break;
+
+
         }
-        return (list);
     }
 
+    /**
+     * Async task class to get json by making HTTP call
+     */
     private class GetStudents extends AsyncTask<Void, Void, Void> {
 
         // Hashmap for ListView
@@ -83,7 +75,7 @@ public class ContaSemFaturaData {
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            pDialog = new ProgressDialog(mContext);
+            pDialog = new ProgressDialog(testecontasemfatura.this);
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -95,11 +87,11 @@ public class ContaSemFaturaData {
             WebRequest webreq = new WebRequest();
 
             // Making a request to url and getting response
-            jsonStr = webreq.makeWebServiceCall(url, WebRequest.GETRequest);
+            String jsonStr = webreq.makeWebServiceCall(url, WebRequest.GETRequest);
 
             Log.d("Response: ", "> " + jsonStr);
 
-
+            studentList = ParseJSON(jsonStr);
 
             return null;
         }
@@ -108,15 +100,28 @@ public class ContaSemFaturaData {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
-            studentList = ParseJSON(jsonStr);
-
             if (pDialog.isShowing())
                 pDialog.dismiss();
-
-            Log.d("debug","fechando caixa de dialogo");
             /**
              * Updating parsed JSON data into ListView
              * */
+            ListAdapter adapter = new SimpleAdapter(
+                    testecontasemfatura.this,
+                    studentList,
+                    R.layout.list_item_contasemfatura,
+                    new String[]{TAG_codigoFatura, TAG_dataVencimento,TAG_valor},
+                    new int[]{R.id.CodigoConta,R.id.Vencimento, R.id.ValorDevido}
+            );
+
+
+            setListAdapter(adapter);
+
+            getListView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(testecontasemfatura.this,"Clicado na classe filha",Toast.LENGTH_SHORT).show();
+                }
+            });
 
 
         }
@@ -156,15 +161,7 @@ public class ContaSemFaturaData {
                     student.put(TAG_codigoBarras, codigoBarras);
 
                     // adding student to students list
-                    ContaSemFatura csf = new ContaSemFatura();
-                    csf.setCodigoConta(codigoFatura);
-                    csf.setUnidadeConsumidora(CodigoCliente);
-                    csf.setCliente("");
-                    csf.setDataVencimento(dataVencimento);
-                    csf.setDataPagamento("");
-                    csf.setCodigodeBarras(codigoBarras);
-                    csf.setValor(valor);
-                    list.add(csf);
+                    studentList.add(student);
                 }
                 return studentList;
             } catch (JSONException e) {
