@@ -300,6 +300,7 @@ public class ContaSemFaturaDetalhe extends Activity  implements View.OnClickList
             String unidadeConsumidora = args[1];
             String pdvID = args[2];
             String url = "http://webapiproxymultipagos.azurewebsites.net/api/pdv/ExibirContaSemFatura?contasemFaturaid="+positions+"&CodigoCliente="+unidadeConsumidora+"&pdvID="+pdvID;
+            //url = "http://localhost:63315/api/pdv/ExibirContaSemFatura?contasemFaturaid="+positions+"&CodigoCliente="+unidadeConsumidora+"&pdvID="+pdvID;
             Integer result = 0;
 
             try {

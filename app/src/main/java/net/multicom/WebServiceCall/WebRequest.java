@@ -42,10 +42,11 @@ public class WebRequest {
         URL url;
         String response = "";
         try {
+            urladdress = urladdress.replace("webapiproxymultipagos","webapiproxymultipagoshomolog");
             url = new URL(urladdress);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15001);
-            conn.setConnectTimeout(15001);
+            conn.setReadTimeout(95001);
+            conn.setConnectTimeout(95001);
 
             //conn.setDoOutput(true);
             if (requestmethod == POSTRequest) {
@@ -84,7 +85,10 @@ public class WebRequest {
                 while ((line = br.readLine()) != null) {
                     response += line;
                 }
-            } else {
+            }else if (reqresponseCode == HttpURLConnection.HTTP_UNSUPPORTED_TYPE) {
+                response = "Documento não autorizado a efetuar o pagamento";
+            }
+            else {
                 response = "";
             }
         } catch (Exception e) {

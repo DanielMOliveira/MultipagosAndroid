@@ -105,7 +105,7 @@ public class ContaSemFaturaDetalhe2 extends Activity  implements View.OnClickLis
             for (int i=0;i<contaSemFaturas.size();i++) {
                 Double valorDouble = 0.0;
                 if (contaSemFaturas.get(i).getStatus().contentEquals("Recebimento Aprovado")) {
-                    valorDouble = Double.parseDouble(contaSemFaturas.get(i).getValor().replace("$", ""));
+                    valorDouble = Double.parseDouble(contaSemFaturas.get(i).getValor().replace(",","").replace("$", ""));
                 }
                 valor += valorDouble;
             }
@@ -251,7 +251,13 @@ public class ContaSemFaturaDetalhe2 extends Activity  implements View.OnClickLis
                 WebRequest webreq = new WebRequest();
                 // Making a request to url and getting response
                 String jsonStr = webreq.makeWebServiceCall(url, WebRequest.GETRequest);
+                if (jsonStr.contains("Documento não autorizado a efetuar o pagamento")) {
+                    result = 2;
+                    return result;
+                }
                 result = 1;
+
+
             }
             catch(Exception e)
             {
@@ -303,6 +309,7 @@ public class ContaSemFaturaDetalhe2 extends Activity  implements View.OnClickLis
             String unidadeConsumidora = args[1];
             String pdvID = args[2];
             String url = "http://webapiproxymultipagos.azurewebsites.net/api/pdv/ExibirContaSemFatura?contasemFaturaid="+positions+"&CodigoCliente="+unidadeConsumidora+"&pdvID="+pdvID;
+            //url = "http://localhost:63315/api/pdv/ExibirContaSemFatura?contasemFaturaid="+positions+"&CodigoCliente="+unidadeConsumidora+"&pdvID="+pdvID;
             Integer result = 0;
 
             try {
@@ -310,6 +317,11 @@ public class ContaSemFaturaDetalhe2 extends Activity  implements View.OnClickLis
                 WebRequest webreq = new WebRequest();
                 // Making a request to url and getting response
                 String jsonStr = webreq.makeWebServiceCall(url, WebRequest.GETRequest);
+                if (jsonStr.contains("Documento não autorizado a efetuar o pagamento")) {
+                    result = 2;
+                    return result;
+                }
+
                 ParseJSON(jsonStr);
                 result = 1;
             }
@@ -336,12 +348,15 @@ public class ContaSemFaturaDetalhe2 extends Activity  implements View.OnClickLis
                     ((TextView)findViewById(R.id.txt_NomeCliente_detalhe)).setText("Total a pagar: R$ " + SomatorioValores(Contas));
                 }
             }
+            if (result == 2)
+                Toast.makeText(ContaSemFaturaDetalhe2.this, "Tipo de documento não autorizado.Boleto", Toast.LENGTH_SHORT).show();
             else //Error
-                Toast.makeText(ContaSemFaturaDetalhe2.this, "Falha consultando conta sem fatura", Toast.LENGTH_SHORT).show();
+              Toast.makeText(ContaSemFaturaDetalhe2.this, "Falha consultando conta sem fatura - Timeout", Toast.LENGTH_SHORT).show();
 
         }
         private void ParseJSON(String json) {
             if (json != null) {
+
                 try {
                     //JSONObject jsonObj = new JSONObject(json);
                     // Getting JSON Array node
@@ -374,9 +389,17 @@ public class ContaSemFaturaDetalhe2 extends Activity  implements View.OnClickLis
                         Contas.add(csf);
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }
 
+                catch (JSONException e) {
+                    if (e.getMessage().contains("cannot be converted")){
+                        return;
+
+                    }
+                    else {
+                        e.printStackTrace();
+                        Toast.makeText(ContaSemFaturaDetalhe2.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
                 Log.e("ServiceHandler", "Couldn't get any data from the url");

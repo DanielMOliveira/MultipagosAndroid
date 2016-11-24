@@ -11,7 +11,11 @@ import android.widget.TextView;
 
 import net.multicom.multipagospagamentos.R;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Daniel on 29/01/2016.
@@ -71,8 +75,20 @@ public class ContaSemFaturaAdapter extends RecyclerView.Adapter<ContaSemFaturaAd
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         final ContaSemFatura contaSemFatura = this.contaSemFaturasList.get(position);
+
+        NumberFormat numberFormat = new DecimalFormat("###,##0.00");
+
+    Double valorDouble = Double.parseDouble(contaSemFatura.getValor().replace("$","").replace(",",""));
+        //String s = numberFormat.format(valorDouble);
+        //s = String.format(Locale.ROOT,"%.2f",valorDouble);
+
+        DecimalFormat formatoDois = new DecimalFormat("##,###,###,##0.00",new DecimalFormatSymbols(new Locale("pt","BR")));
+        formatoDois.setMinimumFractionDigits(2);
+        formatoDois.setParseBigDecimal(true);
+        String s = formatoDois.format(valorDouble);
+
         holder.codigoConta.setText(contaSemFatura.getCodigoConta());
-        holder.valorPagamento.setText(contaSemFatura.getValor());
+        holder.valorPagamento.setText(s);
         holder.dataVencimento.setText(contaSemFatura.getDataVencimento());
         holder.checkBoxSelected.setTag(contaSemFatura);
         holder.checkBoxSelected.setChecked(contaSemFatura.getIsSelected());

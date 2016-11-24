@@ -195,8 +195,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             activeApplicationProvider.execute(); // call this method to run the provider
         }
         else{
-           Partner partnerDeveloper = new Partner(userModels.get(0));
-            userModels.set(0,partnerDeveloper);
+            //Partner partnerDeveloper = new Partner(userModels.get(0));
+            //userModels.set(0,partnerDeveloper);
+            //GlobalInformations.developerMode();
             GlobalInformations.sessionApplication.setUserModelList(userModels);
             ApplicationCache applicationCache = new ApplicationCache(getApplicationContext());
             //if (applicationCache.checkIfHasTables() == false) {
